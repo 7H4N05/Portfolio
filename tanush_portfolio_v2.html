@@ -347,6 +347,36 @@ section{position:relative;z-index:10}
 .tag:hover{border-color:var(--border2);color:var(--g);background:rgba(0,255,135,0.05)}
 
 /* ── PROJECTS ─────────────────────────────── */
+.projects-filter {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--tx2);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+}
+.filter-btn:hover {
+  border-color: var(--border2);
+  color: var(--g);
+  background: rgba(0, 255, 135, 0.02);
+}
+.filter-btn.active {
+  background: rgba(0, 255, 135, 0.05);
+  border-color: var(--g);
+  color: var(--g);
+  box-shadow: 0 0 10px rgba(0, 255, 135, 0.15);
+}
 .projects-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
   gap:1px;background:var(--border)
@@ -354,7 +384,8 @@ section{position:relative;z-index:10}
 .proj-card{
   background:var(--bg2);
   overflow:hidden;position:relative;
-  transition:all 0.3s;cursor:pointer;
+  transition:opacity 0.3s ease, transform 0.3s ease, background 0.3s, border-color 0.3s;
+  cursor:default;
   border:1px solid transparent
 }
 .proj-card:hover{background:var(--bg3);border-color:var(--border2);transform:translateY(-1px)}
@@ -373,7 +404,7 @@ section{position:relative;z-index:10}
   position:absolute;inset:0;
   background:radial-gradient(ellipse at center,rgba(0,255,135,0.03) 0%,transparent 70%)
 }
-.proj-body{padding:1.25rem}
+.proj-body{padding:1.25rem;display:flex;flex-direction:column;min-height:300px}
 .proj-cat{
   font-family:var(--mono);font-size:0.58rem;
   color:var(--c);letter-spacing:0.15em;
@@ -386,7 +417,8 @@ section{position:relative;z-index:10}
 }
 .proj-desc{
   font-size:0.8rem;color:var(--tx3);
-  line-height:1.75;margin-bottom:1rem
+  line-height:1.75;margin-bottom:1rem;
+  flex-grow: 1
 }
 .proj-stack{display:flex;flex-wrap:wrap;gap:0.3rem;margin-bottom:0.75rem}
 .stack-tag{
@@ -398,10 +430,64 @@ section{position:relative;z-index:10}
 .proj-metrics{
   display:flex;gap:1.25rem;
   border-top:1px solid var(--border);
-  padding-top:0.75rem
+  padding:0.75rem 0 0.25rem;
+  margin-bottom:1rem
 }
 .metric{font-family:var(--mono);font-size:0.6rem;color:var(--tx3)}
 .metric span{color:var(--g)}
+.proj-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+.proj-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  transition: all 0.25s ease;
+}
+.proj-btn.btn-git {
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--tx2);
+  border-color: var(--border);
+}
+.proj-btn.btn-git:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border-color: var(--tx2);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+.proj-btn.btn-live {
+  background: rgba(34, 211, 238, 0.04);
+  color: var(--c);
+  border-color: rgba(34, 211, 238, 0.2);
+}
+.proj-btn.btn-live:hover {
+  background: var(--c);
+  color: #000;
+  border-color: var(--c);
+  box-shadow: 0 0 12px var(--c);
+}
+.proj-btn.btn-restricted {
+  background: rgba(255, 69, 96, 0.03);
+  color: var(--r);
+  border-color: rgba(255, 69, 96, 0.15);
+  cursor: not-allowed;
+}
+.proj-btn.btn-restricted:hover {
+  background: rgba(255, 69, 96, 0.08);
+  border-color: var(--r);
+}
 
 /* ── EXPERIENCE ───────────────────────────── */
 #experience{background:var(--bg1)}
@@ -1626,9 +1712,16 @@ body.theme-red {
     </div>
     <div class="section-title reveal">Featured <span class="hlc">Projects</span></div>
     <p class="section-sub reveal" style="margin-bottom:2.5rem">Production systems and security research spanning malware analysis, infrastructure engineering, and offensive security tooling.</p>
+    <div class="projects-filter reveal">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="development">Development</button>
+      <button class="filter-btn" data-filter="cyber">Cyber Projects</button>
+    </div>
+
     <div class="projects-grid">
 
-      <div class="proj-card reveal">
+      <!-- APK Inspector -->
+      <div class="proj-card reveal" data-category="cyber">
         <div class="proj-visual" id="pv1">
           <canvas id="pvc1"></canvas>
           <div class="proj-vis-glow"></div>
@@ -1649,10 +1742,19 @@ body.theme-red {
             <div class="metric">Scoring: <span>Heuristic AI</span></div>
             <div class="metric">Env: <span>Production</span></div>
           </div>
+          <div class="proj-links">
+            <a href="https://github.com/7H4N05" target="_blank" class="proj-btn btn-git">
+              <span>Code Repo</span>
+            </a>
+            <a href="https://github.com/7H4N05" target="_blank" class="proj-btn btn-restricted">
+              <span>Internal Only</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="proj-card reveal" style="transition-delay:0.07s">
+      <!-- TeleGallery -->
+      <div class="proj-card reveal" data-category="development" style="transition-delay:0.07s">
         <div class="proj-visual" id="pv2">
           <canvas id="pvc2"></canvas>
           <div class="proj-vis-glow"></div>
@@ -1672,10 +1774,19 @@ body.theme-red {
             <div class="metric">Uptime: <span>99.7%</span></div>
             <div class="metric">Transfers: <span>500GB+</span></div>
           </div>
+          <div class="proj-links">
+            <a href="https://github.com/7H4N05/TeleGallary" target="_blank" class="proj-btn btn-git">
+              <span>GitHub</span>
+            </a>
+            <a href="https://github.com/7H4N05/TeleGallary" target="_blank" class="proj-btn btn-live">
+              <span>Live Link</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="proj-card reveal" style="transition-delay:0.14s">
+      <!-- SOC Platform -->
+      <div class="proj-card reveal" data-category="cyber" style="transition-delay:0.14s">
         <div class="proj-visual" id="pv3">
           <canvas id="pvc3"></canvas>
           <div class="proj-vis-glow"></div>
@@ -1694,10 +1805,19 @@ body.theme-red {
             <div class="metric">Arch: <span>Microservices</span></div>
             <div class="metric">Alerts: <span>Real-time</span></div>
           </div>
+          <div class="proj-links">
+            <a href="https://github.com/7H4N05/soc-platform" target="_blank" class="proj-btn btn-git">
+              <span>GitHub</span>
+            </a>
+            <a href="https://github.com/7H4N05/soc-platform" target="_blank" class="proj-btn btn-live">
+              <span>Live Link</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="proj-card reveal" style="transition-delay:0.21s">
+      <!-- RiskShield -->
+      <div class="proj-card reveal" data-category="cyber" style="transition-delay:0.21s">
         <div class="proj-visual" id="pv4">
           <canvas id="pvc4"></canvas>
           <div class="proj-vis-glow"></div>
@@ -1715,10 +1835,19 @@ body.theme-red {
             <div class="metric">Scoring: <span>Automated</span></div>
             <div class="metric">Reports: <span>Compliance</span></div>
           </div>
+          <div class="proj-links">
+            <a href="https://github.com/7H4N05/RIskShieldProject" target="_blank" class="proj-btn btn-git">
+              <span>GitHub</span>
+            </a>
+            <a href="https://github.com/7H4N05/RIskShieldProject" target="_blank" class="proj-btn btn-live">
+              <span>Live Link</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="proj-card reveal" style="transition-delay:0.28s">
+      <!-- ESP32 Pentesting Device -->
+      <div class="proj-card reveal" data-category="cyber" style="transition-delay:0.28s">
         <div class="proj-visual" id="pv5">
           <canvas id="pvc5"></canvas>
           <div class="proj-vis-glow"></div>
@@ -1736,10 +1865,19 @@ body.theme-red {
             <div class="metric">Type: <span>Hardware</span></div>
             <div class="metric">Protocol: <span>802.11</span></div>
           </div>
+          <div class="proj-links">
+            <a href="https://github.com/7H4N05" target="_blank" class="proj-btn btn-git">
+              <span>Code Repo</span>
+            </a>
+            <a href="https://github.com/7H4N05" target="_blank" class="proj-btn btn-restricted">
+              <span>Hardware Only</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="proj-card reveal" style="transition-delay:0.35s">
+      <!-- CTF Infrastructure -->
+      <div class="proj-card reveal" data-category="cyber" style="transition-delay:0.35s">
         <div class="proj-visual" id="pv6">
           <canvas id="pvc6"></canvas>
           <div class="proj-vis-glow"></div>
@@ -1756,6 +1894,108 @@ body.theme-red {
           <div class="proj-metrics">
             <div class="metric">Participants: <span>500+</span></div>
             <div class="metric">Duration: <span>24hr</span></div>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/7H4N05" target="_blank" class="proj-btn btn-git">
+              <span>GitHub</span>
+            </a>
+            <a href="https://github.com/7H4N05" target="_blank" class="proj-btn btn-live">
+              <span>Live Link</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Traffic Police Management System -->
+      <div class="proj-card reveal" data-category="development" style="transition-delay:0.42s">
+        <div class="proj-visual" id="pv7">
+          <canvas id="pvc7"></canvas>
+          <div class="proj-vis-glow"></div>
+          <div class="proj-vis-label">TRAFFIC POLICE DATABASE</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-cat">DBMS Project // Full Stack Web Application</div>
+          <div class="proj-name">Traffic Police Management</div>
+          <div class="proj-desc">Comprehensive web application for traffic management with vehicle registration, violation tracking, and fine payment processing. Designed relational database schema ensuring data persistence and role-based access.</div>
+          <div class="proj-stack">
+            <span class="stack-tag">PHP 7.4+</span><span class="stack-tag">MySQL 5.7+</span>
+            <span class="stack-tag">HTML5</span><span class="stack-tag">CSS3</span>
+            <span class="stack-tag">XAMPP</span>
+          </div>
+          <div class="proj-metrics">
+            <div class="metric">Database: <span>MySQL</span></div>
+            <div class="metric">Setup: <span>XAMPP</span></div>
+            <div class="metric">Operations: <span>CRUD</span></div>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/7H4N05/DBMS-project" target="_blank" class="proj-btn btn-git">
+              <span>GitHub</span>
+            </a>
+            <a href="https://github.com/7H4N05/DBMS-project" target="_blank" class="proj-btn btn-live">
+              <span>Live Link</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phoenix Website -->
+      <div class="proj-card reveal" data-category="development" style="transition-delay:0.49s">
+        <div class="proj-visual" id="pv8">
+          <canvas id="pvc8"></canvas>
+          <div class="proj-vis-glow"></div>
+          <div class="proj-vis-label">PHOENIX CLUB PORTAL</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-cat">Club Platform // Full Stack MERN</div>
+          <div class="proj-name">Phoenix Website</div>
+          <div class="proj-desc">Official website for Phoenix Cybersecurity Club. Showcases event management, member directories, and CTF integrations. Designed responsive user interfaces with dynamic backend state synchronization.</div>
+          <div class="proj-stack">
+            <span class="stack-tag">React</span><span class="stack-tag">Node.js</span>
+            <span class="stack-tag">Express</span><span class="stack-tag">MongoDB</span>
+            <span class="stack-tag">Docker</span><span class="stack-tag">AWS</span>
+          </div>
+          <div class="proj-metrics">
+            <div class="metric">Uptime: <span>99%</span></div>
+            <div class="metric">Stars: <span>3 ★</span></div>
+            <div class="metric">Arch: <span>MERN Stack</span></div>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/iamayushbenny/Phoenix-Website" target="_blank" class="proj-btn btn-git">
+              <span>GitHub</span>
+            </a>
+            <a href="https://phoenixcybersec.in/" target="_blank" class="proj-btn btn-live">
+              <span>Live Link</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phoenix Xploit -->
+      <div class="proj-card reveal" data-category="cyber" style="transition-delay:0.56s">
+        <div class="proj-visual" id="pv9">
+          <canvas id="pvc9"></canvas>
+          <div class="proj-vis-glow"></div>
+          <div class="proj-vis-label">PHOENIX XPLOIT ENGINE</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-cat">Offensive Security // Exploit Testing</div>
+          <div class="proj-name">Phoenix Xploit</div>
+          <div class="proj-desc">Cybersecurity exploitation and vulnerability testing project developed under the Phoenix organization. Demonstrates practical exploit scripts, network auditing, and automation of offensive operations.</div>
+          <div class="proj-stack">
+            <span class="stack-tag">TypeScript</span><span class="stack-tag">Node.js</span>
+            <span class="stack-tag">Exploitation</span><span class="stack-tag">Network API</span>
+          </div>
+          <div class="proj-metrics">
+            <div class="metric">Stars: <span>1 ★</span></div>
+            <div class="metric">Focus: <span>Offensive Sec</span></div>
+          </div>
+          <div class="proj-links">
+            <a href="https://github.com/tanushbamnotepcs/Phoenix-Xploit" target="_blank" class="proj-btn btn-git">
+              <span>GitHub</span>
+            </a>
+            <a href="https://github.com/tanushbamnotepcs/Phoenix-Xploit" target="_blank" class="proj-btn btn-live">
+              <span>Live Link</span>
+            </a>
           </div>
         </div>
       </div>
@@ -1790,7 +2030,7 @@ body.theme-red {
         <div class="tl-item">
           <div class="tl-marker c"></div>
           <div class="tl-date c">Oct 2025 — Nov 2025</div>
-          <div class="tl-org">Phoenix CyberSecurity Club</div>
+          <div class="tl-org"><a href="https://phoenixcybersec.in/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed rgba(0,255,135,0.4)">Phoenix CyberSecurity Club</a></div>
           <div class="tl-role">Website Developer &amp; Security Infrastructure Engineer</div>
           <ul class="tl-bullets">
             <li>Designed and deployed official club website using MERN Stack on AWS and Docker</li>
@@ -1824,7 +2064,7 @@ body.theme-red {
         <div class="tl-item">
           <div class="tl-marker"></div>
           <div class="tl-date">2024 — Present</div>
-          <div class="tl-org">Phoenix Cybersecurity Club</div>
+          <div class="tl-org"><a href="https://phoenixcybersec.in/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed rgba(0,255,135,0.4)">Phoenix Cybersecurity Club</a></div>
           <div class="tl-role">Admin &amp; Technical Lead</div>
           <ul class="tl-bullets">
             <li>Design CTF challenges and security training programs for 100+ club members</li>
@@ -2084,6 +2324,11 @@ body.theme-red {
             <span class="opt-desc">Malware analysis, Ghidra, JADX, CTF challenges.</span>
           </div>
           <span class="opt-dl-btn">↓ DL</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 /* ── GLOBAL STATE & CONTROLS ── */
 let isMatrixMode = false;
@@ -2636,7 +2881,10 @@ window.addEventListener('load', () => {
     { id: 'pvc3', theme: 'soc' },
     { id: 'pvc4', theme: 'risk' },
     { id: 'pvc5', theme: 'wifi' },
-    { id: 'pvc6', theme: 'cloud' }
+    { id: 'pvc6', theme: 'cloud' },
+    { id: 'pvc7', theme: 'traffic' },
+    { id: 'pvc8', theme: 'phoenix' },
+    { id: 'pvc9', theme: 'xploit' }
   ];
 
   configs.forEach(cfg => {
@@ -2841,10 +3089,157 @@ window.addEventListener('load', () => {
           }
         });
       }
+      else if (cfg.theme === 'traffic') {
+        // Traffic Police Management - grid intersection simulation
+        ctx.strokeStyle = dynamicAccentCol + '13';
+        ctx.lineWidth = 1;
+        
+        // Draw grid lines (roads)
+        const gridLines = 5;
+        const xSpacing = W / gridLines;
+        const ySpacing = H / gridLines;
+        for (let i = 1; i < gridLines; i++) {
+          ctx.beginPath();
+          ctx.moveTo(i * xSpacing, 0);
+          ctx.lineTo(i * xSpacing, H);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(0, i * ySpacing);
+          ctx.lineTo(W, i * ySpacing);
+          ctx.stroke();
+        }
+        
+        // Draw moving dots representing traffic flow
+        ctx.fillStyle = dynamicThemeCol;
+        for (let i = 1; i < gridLines; i++) {
+          // Horizontal flow
+          const x = (step * (1 + i * 0.15)) % W;
+          ctx.beginPath();
+          ctx.arc(x, i * ySpacing, 3, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Vertical flow
+          const y = (step * (1 + i * 0.1)) % H;
+          ctx.fillStyle = '#f59e0b'; // Yellow for other flow direction
+          ctx.beginPath();
+          ctx.arc(i * xSpacing, y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        
+        ctx.font = '8px monospace';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(`TRAFFIC FLOW: NORMAL`, 15, 20);
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillText(`DB PERSISTENCE: ACTIVE`, 15, 30);
+      }
+      else if (cfg.theme === 'phoenix') {
+        // Phoenix Website - Cyber shield / pulsing logo network
+        const cx = W / 2;
+        const cy = H / 2;
+        
+        // Pulsing geometric lines representing a shield
+        const pulse = 1 + Math.sin(step * 0.05) * 0.08;
+        ctx.strokeStyle = dynamicThemeCol + '44';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        
+        // Shield vertices
+        ctx.moveTo(cx, cy - 35 * pulse);
+        ctx.lineTo(cx + 30 * pulse, cy - 15 * pulse);
+        ctx.lineTo(cx + 25 * pulse, cy + 20 * pulse);
+        ctx.lineTo(cx, cy + 38 * pulse);
+        ctx.lineTo(cx - 25 * pulse, cy + 20 * pulse);
+        ctx.lineTo(cx - 30 * pulse, cy - 15 * pulse);
+        ctx.closePath();
+        ctx.stroke();
+        
+        // Nodes inside shield
+        const nodesInShield = [
+          {x: cx, y: cy - 10},
+          {x: cx - 12, y: cy + 10},
+          {x: cx + 12, y: cy + 10}
+        ];
+        
+        ctx.fillStyle = dynamicThemeCol;
+        nodesInShield.forEach(n => {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+          
+          nodesInShield.forEach(other => {
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.strokeStyle = dynamicThemeCol + '33';
+            ctx.stroke();
+          });
+        });
+        
+        ctx.font = '8px monospace';
+        ctx.fillStyle = dynamicThemeCol;
+        ctx.fillText('PHOENIX PORTAL', cx - 33, cy - 45);
+      }
+      else if (cfg.theme === 'xploit') {
+        // Phoenix Xploit - running exploit codes terminal
+        ctx.fillStyle = 'rgba(12, 13, 16, 0.06)';
+        ctx.fillRect(0, 0, W, H);
+        
+        ctx.font = '8px monospace';
+        ctx.fillStyle = '#ff4560dd'; // Red exploit color
+        
+        const exploitSteps = [
+          'INIT EXPLOIT VECTORS...',
+          'BYPASSING NETWORK IDS...',
+          'PAYLOAD: STAGE-1 LOADED',
+          'OVERFLOW BUFFER AT 0x7FFF',
+          'ESTABLISHING REVERSE SHELL...',
+          'PRIVILEGE ESCALATION: 100%'
+        ];
+        
+        exploitSteps.forEach((line, i) => {
+          const y = ((step * 1.2 + i * 24) % (H - 10)) + 10;
+          ctx.fillText(`[XPLOIT] ${line}`, 15, y);
+        });
+        
+        // Pulsing target indicator
+        const radarY = (step * 2.5) % H;
+        ctx.strokeStyle = '#ff456055';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, radarY);
+        ctx.lineTo(W, radarY);
+        ctx.stroke();
+      }
     }
     setInterval(draw, 30);
   });
 })();
+
+// Project Category Filtering Logic
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    
+    const filter = this.getAttribute('data-filter');
+    document.querySelectorAll('.projects-grid .proj-card').forEach(card => {
+      const cat = card.getAttribute('data-category');
+      if (filter === 'all' || cat === filter) {
+        card.style.display = '';
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+        }, 10);
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          card.style.display = 'none';
+        }, 300);
+      }
+    });
+  });
+});
 
 /* ── SCROLL REVEAL ── */
 const revealObs = new IntersectionObserver(entries => {
@@ -2883,13 +3278,18 @@ Status   : <span style="color:var(--g)">● Available for opportunities</span>`,
 <span style="color:var(--g)">[Tools]</span>     Burp Suite, Ghidra, JADX, Metasploit, Wireshark, Apktool
 <span style="color:var(--g)">[Languages]</span> Python, TypeScript, C++, JavaScript, Bash, PHP, Perl`,
   
-  projects: () => `<span style="color:var(--c)">== Featured Projects ==</span>
-<span style="color:var(--g)">APK Inspector</span>      Android malware analysis [FastAPI/Ghidra/Docker]
+  projects: () => `<span style="color:var(--c)">== Development Projects ==</span>
 <span style="color:var(--g)">TeleGallery</span>        500GB+ uploads, 99.7% uptime [FastAPI/React/Prometheus]
-<span style="color:var(--g)">SOC Platform</span>       Real-time threat detection [Microservices/Python]
-<span style="color:var(--g)">RiskShield</span>         Vulnerability management [Python/Analytics]
-<span style="color:var(--g)">ESP32 Pentesting</span>   Portable IoT security device [C++/Arduino]
-<span style="color:var(--g)">CTF Infrastructure</span> National CTF, 500+ participants [Docker/AWS]`,
+<span style="color:var(--g)">Traffic Police</span>     Traffic database & management application [PHP/MySQL]
+<span style="color:var(--g)">Phoenix Website</span>    Cyber club platform portal [React/Node.js/MongoDB]
+
+<span style="color:var(--c)">== Cyber Projects ==</span>
+<span style="color:var(--g)">APK Inspector</span>      Android malware analysis platform [FastAPI/Ghidra/Docker]
+<span style="color:var(--g)">SOC Platform</span>       Real-time threat operations dashboard [Microservices/Python]
+<span style="color:var(--g)">RiskShield</span>         Vulnerability risk assessment tool [Python/Analytics]
+<span style="color:var(--g)">ESP32 Pentesting</span>   Portable wireless deauth/recon device [C++/Arduino]
+<span style="color:var(--g)">CTF Infrastructure</span> Scalable national CTF deployment [Docker/AWS]
+<span style="color:var(--g)">Phoenix Xploit</span>     Vulnerability testing & exploitation [TypeScript]`,
   
   achievements: () => `<span style="color:var(--c)">== CTF Wins ==</span>
 <span style="color:#ffd700">🥇 1st Place</span>  YCCE CTF 2025, Nagpur
